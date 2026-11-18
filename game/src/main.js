@@ -309,28 +309,31 @@ function shoot() {
   muzzle.position.copy(playerMesh.position).add(new THREE.Vector3(0, 1.5, 0));
   muzzle.intensity = 8;
   setTimeout(() => { muzzle.intensity = 0; }, 60);
-  // Raycast from the camera centre against enemy meshes.
-  const rc = new THREE.Raycaster();
-  rc.setFromCamera(new THREE.Vector2(0, 0), camera);
-  rc.far = 70;
+  // Third-person aim: the shot travels from the player's gun along the
+  // camera's forward direction flattened to chest height (the screen-centre
+  // ray from a high chase camera would dig into the ground a few metres out).
+  const camDir = new THREE.Vector3();
+  camera.getWorldDirection(camDir);
+  camDir.y = 0; camDir.normalize();
+  const origin = playerMesh.position.clone().add(new THREE.Vector3(0, 1.4, 0));
   const alive = G.enemies.filter((e) => e.alive);
-  const hits = rc.intersectObjects(alive.map((e) => e.mesh), true);
-  let end = rc.ray.origin.clone().add(rc.ray.direction.clone().multiplyScalar(60));
-  if (hits.length) {
-    const hit = hits[0];
-    end = hit.point.clone();
-    let target = null;
-    alive.forEach((e) => { if (e.mesh === hit.object || e.mesh.children.includes(hit.object)) target = e; });
-    if (!target) {
-      // Walk up the parent chain.
-      let o = hit.object;
-      while (o && !target) { alive.forEach((e) => { if (e.mesh === o) target = e; }); o = o.parent; }
-    }
-    if (target) {
-      target.health -= 34;
-      spawnDust(end.x, end.z, 1.6);
-      if (target.health <= 0) killEnemy(target);
-    }
+  let best = null, bestD = 70;
+  alive.forEach((e) => {
+    const to = new THREE.Vector3(e.x - origin.x, 0, e.z - origin.z);
+    const d = to.length();
+    if (d > 70 || d < 0.5) return;
+    if (to.dot(camDir) <= 0) return; // behind the player
+    // Lateral distance from the aim line: forgiving of chase-camera lag.
+    const lateral = Math.abs(to.x * camDir.z - to.z * camDir.x);
+    if (lateral < 1.3 && d < bestD) { bestD = d; best = e; }
+  });
+  let end = origin.clone().add(camDir.clone().multiplyScalar(60));
+  end.y = 1.4;
+  if (best) {
+    end = new THREE.Vector3(best.x, 1.3, best.z);
+    best.health -= 34;
+    spawnDust(end.x, end.z, 1.6);
+    if (best.health <= 0) killEnemy(best);
   }
   const pos = tracer.geometry.attributes.position;
   const start = playerMesh.position.clone().add(new THREE.Vector3(0, 1.4, 0));
