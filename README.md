@@ -1,8 +1,8 @@
 # Solmaris — Open-World Crime Game
 
-[![Stars](https://badgen.net/github/stars/Dilslino/gta6-01-solmaris-v6)](https://github.com/Dilslino/gta6-01-solmaris-v6)
-[![License](https://badgen.net/github/license/Dilslino/gta6-01-solmaris-v6)](https://github.com/Dilslino/gta6-01-solmaris-v6/blob/main/LICENSE)
-[![Last commit](https://badgen.net/github/last-commit/Dilslino/gta6-01-solmaris-v6)](https://github.com/Dilslino/gta6-01-solmaris-v6/commits/main)
+[![make.fun · gta6-01](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![rank](https://make.fun/badge/gta6-01/Dilslino/gta6-01-solmaris-v6/rank.svg)](https://make.fun/bounty/gta6-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![reward](https://make.fun/badge/gta6-01/Dilslino/gta6-01-solmaris-v6/reward.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
 
 **Solmaris** is a complete GTA-style open-world crime game that runs entirely
 offline in a desktop browser from static files. Explore a sun-soaked coastal
